@@ -13,6 +13,7 @@
   text-align: center;
   margin-bottom: var(--et-space-xl);
   box-shadow: var(--et-shadow-lg);
+  
   border: 1px solid var(--et-border-medium);
 }
 
