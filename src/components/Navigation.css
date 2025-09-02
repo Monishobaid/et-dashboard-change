@@ -1,0 +1,118 @@
+.navigation {
+  background: var(--et-bg-primary);
+  border-bottom: 2px solid var(--et-primary);
+  box-shadow: var(--et-shadow-md);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.nav-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 var(--et-space-lg);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 72px;
+}
+
+.nav-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.brand-logo {
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+}
+
+.brand-et {
+  font-size: 28px;
+  font-weight: var(--et-font-weight-bold);
+  color: var(--et-primary);
+  letter-spacing: -1px;
+}
+
+.brand-markets {
+  font-size: 28px;
+  font-weight: var(--et-font-weight-bold);
+  color: var(--et-accent);
+  letter-spacing: -1px;
+}
+
+.brand-subtitle {
+  font-size: var(--et-font-size-xs);
+  color: var(--et-text-secondary);
+  font-weight: var(--et-font-weight-medium);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.nav-links {
+  display: flex;
+  gap: var(--et-space-sm);
+}
+
+.nav-link {
+  padding: 12px 24px;
+  border: 1px solid var(--et-border-light);
+  background: var(--et-bg-primary);
+  color: var(--et-text-secondary);
+  font-size: var(--et-font-size-sm);
+  font-weight: var(--et-font-weight-medium);
+  border-radius: var(--et-radius-md);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: var(--et-space-sm);
+  font-family: var(--et-font-family);
+}
+
+.nav-link:hover {
+  background: var(--et-bg-light);
+  color: var(--et-text-primary);
+  border-color: var(--et-border-medium);
+}
+
+.nav-link.active {
+  background: var(--et-primary);
+  color: var(--et-text-white);
+  border-color: var(--et-primary);
+}
+
+.nav-link.active:hover {
+  background: var(--et-primary-dark);
+  border-color: var(--et-primary-dark);
+}
+
+.nav-icon {
+  font-size: 16px;
+}
+
+@media (max-width: 768px) {
+  .nav-container {
+    padding: var(--et-space-md);
+    flex-direction: column;
+    gap: var(--et-space-md);
+    min-height: auto;
+  }
+  
+  .brand-et, .brand-markets {
+    font-size: 24px;
+  }
+  
+  .nav-links {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .nav-link {
+    flex: 1;
+    justify-content: center;
+    padding: 14px 20px;
+  }
+}

@@ -1,24 +1,19 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState } from 'react';
+import { Navigation } from './components/Navigation';
+import { Dashboard } from './components/Dashboard';
+import { AnalyticsDashboard } from './components/AnalyticsDashboard';
+import './styles/theme.css';
 import './App.css';
 
 function App() {
+  const [activeView, setActiveView] = useState<'sessions' | 'analytics'>('sessions');
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Navigation activeView={activeView} onViewChange={setActiveView} />
+      <main className="main-content">
+        {activeView === 'sessions' ? <Dashboard /> : <AnalyticsDashboard />}
+      </main>
     </div>
   );
 }
