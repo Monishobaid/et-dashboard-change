@@ -34,7 +34,33 @@ export const SessionCard: React.FC<SessionCardProps> = ({ session }) => {
     );
   };
 
+  const getModelBadge = (model: string) => {
+    const getModelClass = (modelName: string) => {
+      if (modelName.includes('gpt')) return 'model-gpt';
+      if (modelName.includes('gemini')) return 'model-gemini';
+      if (modelName.includes('claude')) return 'model-claude';
+      return 'model-default';
+    };
+    
+    const getModelDisplay = (modelName: string) => {
+      // Clean up model names for display
+      return modelName
+        .replace('gpt-4.1-mini', 'GPT-4.1 Mini')
+        .replace('gemini-2.5-pro', 'Gemini 2.5 Pro')
+        .replace(/^(gpt|gemini|claude)-?/i, (match, prefix) => 
+          prefix.toUpperCase() + ' '
+        );
+    };
+    
+    return (
+      <span className={`model-badge ${getModelClass(model)}`}>
+        {getModelDisplay(model)}
+      </span>
+    );
+  };
+
   const totalCredits = session.messages.reduce((sum, msg) => sum + msg.creditsUsed, 0);
+  const totalCost = session.messages.reduce((sum, msg) => sum + msg.totalCostInr, 0);
   
   return (
     <div className="session-card compact">
@@ -46,12 +72,16 @@ export const SessionCard: React.FC<SessionCardProps> = ({ session }) => {
             <span className="stat-chip negative">{session.dislikeCount} Dislikes</span>
             <span className="stat-chip neutral">{session.messageCount} Messages</span>
             <span className="stat-chip credits">{totalCredits} Credits</span>
+            <span className="stat-chip cost">₹{(totalCost / 100).toFixed(2)}</span>
           </div>
         </div>
         
         <div className="session-info-row">
           <span className="session-time">{formatTimestamp(session.createdAt)}</span>
-          <span className="session-id-short">ID: {session.sessionId.slice(0, 8)}</span>
+          <span className="session-email">{session.emailId}</span>
+          <span className="session-id">Session ID: {session.sessionId}</span>
+          <span className="session-user-id">User ID: {session.userId}</span>
+          {session.ssoID && <span className="session-sso">SSO: {session.ssoID}</span>}
           <a href={session.sessionUrl} target="_blank" rel="noopener noreferrer" className="view-link">
             View →
           </a>
@@ -65,10 +95,12 @@ export const SessionCard: React.FC<SessionCardProps> = ({ session }) => {
               <span className="query-compact">{message.query}</span>
               <div className="message-tags">
                 {getToolBadge(message.toolUsed)}
+                {getModelBadge(message.modelUsed)}
                 <span className={`action-compact ${getActionClass(message.userAction)}`}>
                   {message.userAction === 'like' ? 'LIKED' : message.userAction === 'dislike' ? 'DISLIKED' : 'NO ACTION'}
                 </span>
                 <span className="credits-compact">{message.creditsUsed} credits</span>
+                <span className="cost-compact">₹{(message.totalCostInr / 100).toFixed(2)}</span>
               </div>
             </div>
             {message.userReview && (

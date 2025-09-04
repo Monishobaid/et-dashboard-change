@@ -4,6 +4,7 @@ export interface Message {
   query: string;
   timestamp: number;
   toolUsed: string;
+  totalCostInr: number;
   userAction: 'like' | 'dislike' | null;
   userReview: string | null;
 }
@@ -11,6 +12,7 @@ export interface Message {
 export interface Session {
   createdAt: number;
   dislikeCount: number;
+  emailId: string;
   lastUpdatedAt: number;
   likeCount: number;
   messageCount: number;
@@ -18,6 +20,7 @@ export interface Session {
   reviewCount: number;
   sessionId: string;
   sessionUrl: string;
+  ssoID?: string;
   title: string;
   userId: string;
 }

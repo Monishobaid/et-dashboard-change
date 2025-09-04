@@ -40,13 +40,37 @@ export const AnalyticsDashboard: React.FC = () => {
     setError(null);
     
     try {
-      const data = await sessionService.fetchSessionData({
+      // First, get a large batch to see total count
+      const initialData = await sessionService.fetchSessionData({
         filters: {},
         pagination: { page: 1, pageSize: 1000 }
       });
       
-      setAllSessions(data.sessions);
-      const analyticsData = AnalyticsService.processSessionData(data.sessions);
+      let allSessions = [...initialData.sessions];
+      
+      // If there are more sessions, fetch them in batches
+      if (initialData.pagination.hasMore && initialData.pagination.totalPages && initialData.pagination.totalPages > 1) {
+        const totalPages = initialData.pagination.totalPages;
+        const fetchPromises = [];
+        
+        // Fetch remaining pages in parallel
+        for (let page = 2; page <= Math.min(totalPages, 10); page++) { // Limit to 10 pages max for performance
+          fetchPromises.push(
+            sessionService.fetchSessionData({
+              filters: {},
+              pagination: { page, pageSize: 1000 }
+            })
+          );
+        }
+        
+        const additionalData = await Promise.all(fetchPromises);
+        additionalData.forEach(data => {
+          allSessions = allSessions.concat(data.sessions);
+        });
+      }
+      
+      setAllSessions(allSessions);
+      const analyticsData = AnalyticsService.processSessionData(allSessions);
       setAnalytics(analyticsData);
     } catch (err) {
       setError('Failed to fetch analytics data');
