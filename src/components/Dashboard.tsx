@@ -8,11 +8,10 @@ export const Dashboard: React.FC = () => {
   const [sessions, setSessions] = useState<Session[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [filters, setFilters] = useState<Filters>({
-    userReviewed: true
-  });
+  const [filters, setFilters] = useState<Filters>({});
   const [searchUserIds, setSearchUserIds] = useState<string>('');
   const [searchSessionIds, setSearchSessionIds] = useState<string>('');
+  const [searchEmailIds, setSearchEmailIds] = useState<string>('');
   const [pagination, setPagination] = useState({
     page: 1,
     pageSize: 20
@@ -63,6 +62,10 @@ export const Dashboard: React.FC = () => {
         searchFilters.sessionIds = searchSessionIds.split(',').map(id => id.trim()).filter(id => id);
       }
       
+      if (searchEmailIds.trim()) {
+        searchFilters.emailIds = searchEmailIds.split(',').map(id => id.trim()).filter(id => id);
+      }
+      
       const data = await sessionService.fetchSessionData({
         filters: searchFilters,
         pagination
@@ -76,7 +79,7 @@ export const Dashboard: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  }, [filters, pagination, searchUserIds, searchSessionIds]);
+  }, [filters, pagination, searchUserIds, searchSessionIds, searchEmailIds]);
 
   useEffect(() => {
     fetchSessions();
@@ -151,6 +154,13 @@ export const Dashboard: React.FC = () => {
               placeholder="Search Session IDs (comma-separated)"
               value={searchSessionIds}
               onChange={(e) => setSearchSessionIds(e.target.value)}
+              className="compact-input"
+            />
+            <input
+              type="text"
+              placeholder="Search Email IDs (comma-separated)"
+              value={searchEmailIds}
+              onChange={(e) => setSearchEmailIds(e.target.value)}
               className="compact-input"
             />
           </div>
@@ -263,7 +273,8 @@ export const Dashboard: React.FC = () => {
           <button onClick={() => {
             setSearchUserIds('');
             setSearchSessionIds('');
-            setFilters({ userReviewed: true });
+            setSearchEmailIds('');
+            setFilters({});
           }} className="reset-filters-button">
             Reset Filters
           </button>

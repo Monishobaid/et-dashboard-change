@@ -28,6 +28,7 @@ export interface Session {
 export interface Filters {
   userIds?: string[];
   sessionIds?: string[];
+  emailIds?: string[];
   liked?: boolean;
   disliked?: boolean;
   userReviewed?: boolean;
